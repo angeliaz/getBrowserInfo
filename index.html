@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Browser Info</title>
+</head>
+<body>
+	
+	<script>
+		
+		var BroserInfo = {
+
+			// 获取浏览器及版本信息：模仿jquery
+			// browser:chrome:chrome, webkit:webkit, opera:opera, msie:ie, mozilla:firefox
+			getVersion: function() {
+				var ua = navigator.userAgent.toLowerCase();
+				var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
+					/(webkit)[ \/]([\w.]+)/.exec( ua ) ||
+					/(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
+					/(msie) ([\w.]+)/.exec( ua ) ||
+					ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
+					[];
+
+				return {
+					browser: match[ 1 ] || "",
+					version: match[ 2 ] || "0"
+				};
+			},
+
+			// 获取浏览器flash版本
+			getFlashVersion: function() {
+			  var b = [0, 0, 0];
+		      var c, f;
+		      
+		      
+		      if (navigator.plugins && navigator.mimeTypes.length) {
+		        var plugins = navigator.plugins["Shockwave Flash"];
+		        
+		        if (plugins && plugins.description) {
+		          return plugins.description.replace(/^\D+/, "").replace(/\s*r/, ".").replace(/\s*[a-z]+\d*/, ".0").split(".");
+		        }
+		      }
+		      
+		      // 
+		      if (navigator.userAgent && navigator.userAgent.indexOf("Windows CE") !== -1) {
+		        c = 1;
+		        f = 3;
+		        
+		        while (c) {
+		          
+		          try {
+		            c = new ActiveXObject("ShockwaveFlash.ShockwaveFlash." + (++f));
+		            return [f, 0, 0];
+		          
+		          } catch (d) {
+		            c = null;
+		          }
+		        }
+		      }
+		      
+		      try {
+		        c = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
+		      
+		      } catch (d) {
+		        
+		        try {
+		          c = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.6");
+		          b = [6, 0, 21];
+		          c.AllowScriptAccess = "always";
+		        
+		        } catch (event) {
+		          
+		          if (b.major === 6) {
+		            return event;
+		          }
+		        }
+		        
+		        try {
+		          c = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
+		        
+		        } catch (event) {}
+		      }
+
+		      if (c) {
+		        b = c.GetVariable("$version").split(" ")[1].split(",");
+		      }
+		      return b;
+			},
+
+
+			getDeviceInfo: function() {
+
+				// 一大批基于ua进行判断的正则。
+			    var oTemp = {};
+			    var os = oTemp.os = {};
+			    var browser = oTemp.browser = {};
+			    var webkit = ua.match(/WebKit\/([\d.]+)/);
+			    var android = ua.match(/(Android)\s+([\d.]+)/);
+			    var ipad = ua.match(/(iPad).*OS\s([\d_]+)/);
+			    var iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/);
+			    var webos = ua.match(/(webOS|hpwOS)[\s\/]([\d.]+)/);
+			    var touchpad = webos && ua.match(/TouchPad/);
+			    var kindle = ua.match(/Kindle\/([\d.]+)/);
+			    var silk = ua.match(/Silk\/([\d._]+)/);
+			    var blackberry = ua.match(/(BlackBerry).*Version\/([\d.]+)/);
+			    var bb10 = ua.match(/(BB10).*Version\/([\d.]+)/);
+			    var rimtabletos = ua.match(/(RIM\sTablet\sOS)\s([\d.]+)/);
+			    var playbook = ua.match(/PlayBook/);
+			    var chrome = ua.match(/Chrome\/([\d.]+)/) || ua.match(/CriOS\/([\d.]+)/);
+			    var firefox = ua.match(/Firefox\/([\d.]+)/);
+			    var bIsWM = ua.match(/Windows Phone/);
+			}
+
+		};
+
+
+	</script>
+</body>
+</html>
